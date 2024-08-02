@@ -19,14 +19,14 @@
     </style>
 </head>
 <body>
-<form action="http://localhost:8080/upload" method="post" enctype="multipart/form-data">
+<form action="http://localhost:8080/upload" method="post" enctype="multipart/form-data" target="table-container">
     <h2>העלאת קובץ קונפיגורציה</h2>
     <label for="config-file">בחר קובץ:</label>
     <input type="file" id="config-file" name="config-file" required>
     <input type="submit" value="Deploy">
 </form>
 
-<form action="http://localhost:8080/publish" method="get">
+<form action="http://localhost:8080/publish" method="get" target="hello">
     <h2>שליחת הודעה ל-Topic</h2>
     <label for="topic">Topic:</label>
     <input type="text" id="topic" name="topic" required>

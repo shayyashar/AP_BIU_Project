@@ -29,7 +29,7 @@ public class PlusAgent implements Agent{
 
     @Override
     public String getName() {
-        return "";
+        return "Plus Agent";
     }
 
     @Override

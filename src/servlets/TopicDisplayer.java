@@ -22,7 +22,7 @@ public class TopicDisplayer implements Servlet {
             out.println("<tr><td>" + t.name + "</td><td>" + t.last_message + "</td></tr>");
         }
         out.println("</table></body></html>");
-        out.flush();
+        out.close();
     }
 
     @Override

@@ -56,8 +56,6 @@ public class MyHTTPServer extends Thread implements HTTPServer{
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
     }
 
@@ -78,12 +76,6 @@ public class MyHTTPServer extends Thread implements HTTPServer{
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 

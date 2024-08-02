@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class HtmlGraphWriter {
-    public static List<String> getGraphHTML(Graph graph) {
+    public static String getGraphHTML(Graph graph) {
         List<String> html = new ArrayList<>();
         html.add("<html>");
         html.add("<body>");
@@ -22,6 +22,7 @@ public class HtmlGraphWriter {
         html.add("</script>");
         html.add("</body>");
         html.add("</html>");
-        return html;
+
+        return String.join("", html);
     }
 }

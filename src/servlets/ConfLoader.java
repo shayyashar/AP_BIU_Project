@@ -1,10 +1,13 @@
 package servlets;
 
+import test.GenericConfig;
 import test.Graph;
 import test.Servlet;
 import test.RequestParser;
 import views.HtmlGraphWriter;
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfLoader implements Servlet {
     @Override
@@ -12,23 +15,42 @@ public class ConfLoader implements Servlet {
 //        String boundary = "--" + ri.getHeaders().get("Content-Type").split("boundary=")[1];
 //        InputStream input = ri.getContentStream();
 
-        File tempFile = File.createTempFile("upload", ".tmp");
-//        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-//            byte[] buffer = new byte[1024];
-//            int bytesRead;
-//            while ((bytesRead = input.read(buffer)) != -1) {
-//                fos.write(buffer, 0, bytesRead);
-//            }
-//        }
+        String content = new String(ri.getContent());
+
+        // Define a regex pattern to extract the filename
+        String filenamePattern = "filename=\"([^\"]+)\"";
+
+        // Compile the pattern
+        Pattern pattern = Pattern.compile(filenamePattern);
+        Matcher matcher = pattern.matcher(content);
+
+        String filename = "";
+        if (matcher.find()) {
+            filename = matcher.group(1);
+        }
+
+        String fullPath = "config_files/" + filename;
+
+        GenericConfig genConf = new GenericConfig();
+        genConf.setConfFile(fullPath);
+
+        genConf.create();
 
         Graph graph = new Graph();
+
+        graph.createFromTopics();
+
         String htmlGraph = String.valueOf(HtmlGraphWriter.getGraphHTML(graph));
 
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
-        out.println(htmlGraph);
-        out.flush();
+        toClient.write("hiiiii".getBytes());
+//
+//        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
+//        out.println(htmlGraph);
+//        out.flush();
 
-        tempFile.delete();
+//        tempFile.delete();
+        System.out.println("here");
+        toClient.close();
     }
 
     @Override

@@ -11,7 +11,7 @@ public class GenericConfig implements Config{
     public String configFile;
     public List<ParallelAgent> agents;
 
-    void setConfFile(String filePath) {
+    public void setConfFile(String filePath) {
         this.configFile = filePath;
     }
 

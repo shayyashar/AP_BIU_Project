@@ -21,7 +21,7 @@ public class IncAgent  implements Agent{
 
     @Override
     public String getName() {
-        return "";
+        return "Inc Agent";
     }
 
     @Override
