@@ -13,11 +13,11 @@ public class Node {
         this.edges = new ArrayList<Node>();
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    List<Node> getEdges() {
+    public List<Node> getEdges() {
         return this.edges;
     }
 

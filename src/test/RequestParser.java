@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class RequestParser {
     public static RequestInfo parseRequest(BufferedReader reader) throws IOException {
+
         String initialLine = reader.readLine();
         if (initialLine == null) {
             throw new IOException("Empty request");
@@ -41,25 +42,34 @@ public class RequestParser {
 
         String line;
         int contentLength = 0;
-        while ((line = reader.readLine()) != null && !line.isEmpty()) {
+        while (!(line = reader.readLine()).equals("")) {
             if (line.startsWith("Content-Length")) {
                 contentLength = Integer.parseInt(line.split(": ")[1]);
             }
         }
 
-
-        while ((line = reader.readLine()) != null && !line.isEmpty()) {
-            String[] keyValue = line.split("=");
-            queryParams.put(keyValue[0], keyValue[1]);
-        }
+        System.out.println("start" + httpCommanmd + uri);
 
         StringBuilder content = new StringBuilder();
-        while ((line = reader.readLine()) != null && !line.isEmpty()) {
-            content.append(line + '\n');
+        if (contentLength > 0) {
+            while (!(line = reader.readLine()).equals("")) {
+                if (line.contains("filename=")) {
+                    String[] keyValue = line.split("filename=");
+                    queryParams.put("filename", keyValue[1]);
+                }
+            }
+
+            while (!(line = reader.readLine()).equals("") && !line.startsWith("------WebKitFormBoundary")) {
+                content.append(line + "\n");
+                System.out.println(content);
+            }
+
+            while (reader.ready()) {
+                line = reader.readLine();
+            }
         }
 
-
-
+        System.out.println("end" + httpCommanmd + uri);
         return new RequestInfo(httpCommanmd, uri, uriParts, queryParams, content.toString().getBytes("UTF-8"));
     }
 

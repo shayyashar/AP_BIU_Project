@@ -74,7 +74,7 @@ public class MyHTTPServer extends Thread implements HTTPServer{
                     out.write(response.getBytes());
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

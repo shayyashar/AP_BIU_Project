@@ -6,27 +6,22 @@ import test.Servlet;
 import test.RequestParser;
 import views.HtmlGraphWriter;
 import java.io.*;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConfLoader implements Servlet {
     @Override
     public void handle(RequestParser.RequestInfo ri, OutputStream toClient) throws IOException {
-//        String boundary = "--" + ri.getHeaders().get("Content-Type").split("boundary=")[1];
-//        InputStream input = ri.getContentStream();
 
-        String content = new String(ri.getContent());
-
-        // Define a regex pattern to extract the filename
-        String filenamePattern = "filename=\"([^\"]+)\"";
-
-        // Compile the pattern
-        Pattern pattern = Pattern.compile(filenamePattern);
-        Matcher matcher = pattern.matcher(content);
+        Map<String, String> params = ri.getParameters();
 
         String filename = "";
-        if (matcher.find()) {
-            filename = matcher.group(1);
+        for(String param: params.keySet()) {
+            if (param.equals("filename")) {
+                filename = params.get("filename").replace("\"", "");
+            }
         }
 
         String fullPath = "config_files/" + filename;
@@ -42,15 +37,14 @@ public class ConfLoader implements Servlet {
 
         String htmlGraph = String.valueOf(HtmlGraphWriter.getGraphHTML(graph));
 
-        toClient.write("hiiiii".getBytes());
-//
-//        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
-//        out.println(htmlGraph);
-//        out.flush();
+        PrintWriter writer = new PrintWriter(toClient, true);
 
-//        tempFile.delete();
+
+        writer.println(("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"));
+
+        writer.println(htmlGraph);
+
         System.out.println("here");
-        toClient.close();
     }
 
     @Override

@@ -15,14 +15,16 @@ public class TopicDisplayer implements Servlet {
         TopicManagerSingleton.TopicManager tm = TopicManagerSingleton.get();
         tm.getTopic(topic).publish(new Message(message));
 
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
-        out.println("<html><body><table border='1'>");
-        out.println("<tr><th>Topic</th><th>Value</th></tr>");
+        PrintWriter writer = new PrintWriter(toClient, true);
+        StringBuilder toWrite = new StringBuilder();
+        writer.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        toWrite.append("<!DOCTYPE html><html lang=\"en\"><body><table border='1' style='margin:auto;margin-top:100px'>");
+        toWrite.append("<tr><th>Topic</th><th>Value</th></tr>");
         for (Topic t : tm.getTopics()) {
-            out.println("<tr><td>" + t.name + "</td><td>" + t.last_message + "</td></tr>");
+            toWrite.append("<tr><td>" + t.name + "</td><td>" + t.last_message.asDouble + "</td></tr>");
         }
-        out.println("</table></body></html>");
-        out.close();
+        toWrite.append("</table></body></html>");
+        writer.println(toWrite);
     }
 
     @Override

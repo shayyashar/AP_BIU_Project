@@ -12,7 +12,6 @@ public class Topic {
         this.name = name;
         this.subs = new ArrayList<Agent>();
         this.pubs = new ArrayList<Agent>();
-        this.last_message = new Message(0.0);
     }
 
 
