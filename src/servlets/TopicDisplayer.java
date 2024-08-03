@@ -1,10 +1,11 @@
 package servlets;
 
-import test.*;
+import graph.Message;
+import graph.Topic;
+import graph.TopicManagerSingleton;
+import server.RequestParser;
 
 import java.io.*;
-import java.util.Map;
-import java.util.HashMap;
 
 public class TopicDisplayer implements Servlet {
     @Override
@@ -18,7 +19,7 @@ public class TopicDisplayer implements Servlet {
         PrintWriter writer = new PrintWriter(toClient, true);
         StringBuilder toWrite = new StringBuilder();
         writer.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n");
-        toWrite.append("<!DOCTYPE html><html lang=\"en\"><body><table border='1' style='margin:auto;margin-top:100px'>");
+        toWrite.append("<!DOCTYPE html><html lang=\"en\"><body><table border='1' style='margin:auto;margin-top:30%'>");
         toWrite.append("<tr><th>Topic</th><th>Value</th></tr>");
         for (Topic t : tm.getTopics()) {
             toWrite.append("<tr><td>" + t.name + "</td><td>" + t.last_message.asDouble + "</td></tr>");

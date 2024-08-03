@@ -1,7 +1,7 @@
 package views;
 
-import test.Graph;
-import test.Node;
+import configs.Graph;
+import configs.Node;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,7 @@ public class HtmlGraphWriter {
                                 .link {
                                     fill: none;
                                     stroke: #666;
-                                    stroke-width: 4.5px;
+                                    stroke-width: 5px;
                                     marker-end: url(#arrow); /* Add arrow markers */
                                 }
                                 .node text {
@@ -34,8 +34,8 @@ public class HtmlGraphWriter {
                                 }
                             </style>
                         </head>
-                        <body>
-                        <svg width="500" height="500"></svg>
+                        <body style="justify-content:center">
+                        <svg width="700" height="700"></svg>
                         <script>
                         """
         );
@@ -94,7 +94,7 @@ public class HtmlGraphWriter {
                     .attr('d', 'M 0 0 L 10 5 L 0 10 z');
                 var simulation = d3.forceSimulation(nodes)
                     .force("link", d3.forceLink(links).id(function(d) { return d.id; }))
-                    .force("charge", d3.forceManyBody().strength(-1000))
+                    .force("charge", d3.forceManyBody().strength(-1200))
                     .force("center", d3.forceCenter(width / 2, height / 2));
                 var link = svg.append("g")
                     .attr("class", "links")
@@ -112,14 +112,14 @@ public class HtmlGraphWriter {
                     if (d.type === 'Agent') {
                         d3.select(this).append("circle")
                             .attr("r", 10)
-                            .attr("fill", 'blue');
+                            .attr("fill", 'DodgerBlue');
                     } else if (d.type === 'Topic') {
                         d3.select(this).append("rect")
                             .attr("width", 20)
                             .attr("height", 20)
                             .attr("x", -10)
                             .attr("y", -10)
-                            .attr("fill", 'green');
+                            .attr("fill", 'MediumSeaGreen');
                     }
                 });
 

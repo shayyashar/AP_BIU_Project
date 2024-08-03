@@ -1,15 +1,12 @@
 package servlets;
 
-import test.GenericConfig;
-import test.Graph;
-import test.Servlet;
-import test.RequestParser;
+import configs.GenericConfig;
+import configs.Graph;
+import graph.TopicManagerSingleton;
+import server.RequestParser;
 import views.HtmlGraphWriter;
 import java.io.*;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ConfLoader implements Servlet {
     @Override
@@ -24,8 +21,10 @@ public class ConfLoader implements Servlet {
             }
         }
 
-        String fullPath = "config_files/" + filename;
+        TopicManagerSingleton.TopicManager tm = TopicManagerSingleton.get();
+        tm.clear();
 
+        String fullPath = "config_files/" + filename;
         GenericConfig genConf = new GenericConfig();
         genConf.setConfFile(fullPath);
 

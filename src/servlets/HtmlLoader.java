@@ -1,8 +1,7 @@
 
 package servlets;
 
-import test.RequestParser.RequestInfo;
-import test.Servlet;
+import server.RequestParser.RequestInfo;
 
 import java.io.IOException;
 import java.io.OutputStream;

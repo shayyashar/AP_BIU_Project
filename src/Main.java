@@ -1,11 +1,8 @@
 import servlets.ConfLoader;
 import servlets.HtmlLoader;
 import servlets.TopicDisplayer;
-import test.HTTPServer;
-import test.MyHTTPServer;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import server.HTTPServer;
+import server.MyHTTPServer;
 
 public class Main {
     public static void main(String[] args) throws Exception{

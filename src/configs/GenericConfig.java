@@ -1,4 +1,7 @@
-package test;
+package configs;
+import graph.Agent;
+import graph.ParallelAgent;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -7,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 
-public class GenericConfig implements Config{
+public class GenericConfig implements Config {
     public String configFile;
     public List<ParallelAgent> agents;
 

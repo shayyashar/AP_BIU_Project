@@ -11,24 +11,25 @@
             height: 100%;
             display: flex;
             width: -webkit-fill-available;
+            justify-content: center;
         }
         iframe {
             border: none;
         }
         #leftframe {
-            flex: 1 1 25%;
+            flex: 1 1 15%;
         }
         #centerframe {
-            flex: 2 1 50%;
+            flex: 2 1 70%;
         }
         #rightframe {
-            flex: 1 1 25%;
+            flex: 1 1 15%;
         }
     </style>
 </head>
 <body>
-<iframe id="leftframe" src="form.html" name="leftframe" title="leftframe"></iframe>
+<iframe id="rightframe" src="form.html" name="rightframe" title="rightframe"></iframe>
 <iframe id="centerframe" src="graph.html" name="centerframe" title="centerframe"></iframe>
-<iframe id="rightframe" src="table.html" name="rightframe" title="rightframe"></iframe>
+<iframe id="leftframe" src="table.html" name="leftframe" title="leftframe"></iframe>
 </body>
 </html>

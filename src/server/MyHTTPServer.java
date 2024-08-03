@@ -1,6 +1,6 @@
-package test;
+package server;
 
-import test.RequestParser.RequestInfo;
+import servlets.Servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,14 +9,13 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class MyHTTPServer extends Thread implements HTTPServer{
+public class MyHTTPServer extends Thread implements HTTPServer {
 
     private final int port;
     private final ExecutorService threadPool;
