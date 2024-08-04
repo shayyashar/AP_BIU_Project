@@ -17,6 +17,7 @@ public class TopicDisplayer implements Servlet {
         tm.getTopic(topic).publish(new Message(message));
 
         PrintWriter writer = new PrintWriter(toClient, true);
+        // create a table for html to return to client
         StringBuilder toWrite = new StringBuilder();
         writer.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n");
         toWrite.append("<!DOCTYPE html><html lang=\"en\"><body><table border='1' style='margin:auto;margin-top:30%'>");

@@ -6,7 +6,7 @@ public class Topic {
     public final String name;
     public ArrayList<Agent> subs;
     public ArrayList<Agent> pubs;
-    public Message last_message;
+    public Message last_message; // for final project
 
     Topic(String name) {
         this.name = name;

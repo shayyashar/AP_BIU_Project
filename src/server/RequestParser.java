@@ -13,13 +13,16 @@ public class RequestParser {
             throw new IOException("Empty request");
         }
 
+        // extract the command ('GET', 'POST') + the uri
         String[] initialParts = initialLine.split(" ");
         String httpCommanmd = initialParts[0];
         String uri = initialParts[1];
 
+        // get the uri segments
         String[] fullUriParts = uri.split("\\?")[0].split("/");
         String[] uriParts = new String[fullUriParts.length - 1];
 
+        // the first cell is "" so drop it
         int index = 0;
         for (String str : fullUriParts) {
             if (!str.isEmpty()) {
@@ -27,6 +30,7 @@ public class RequestParser {
             }
         }
 
+        // get the uri params
         Map<String, String> queryParams = new HashMap<>();
         if (uri.contains("?")) {
             String uriParams = uri.split("\\?")[1];
@@ -39,6 +43,7 @@ public class RequestParser {
             }
         }
 
+        // extract the Content-Length
         String line;
         int contentLength = 0;
         while (!(line = reader.readLine()).equals("")) {
@@ -47,10 +52,10 @@ public class RequestParser {
             }
         }
 
-        System.out.println("start" + httpCommanmd + uri);
-
+        // content part
         StringBuilder content = new StringBuilder();
         if (contentLength > 0) {
+            // extract the filename
             while (!(line = reader.readLine()).equals("")) {
                 if (line.contains("filename=")) {
                     String[] keyValue = line.split("filename=");
@@ -58,17 +63,18 @@ public class RequestParser {
                 }
             }
 
+            // extarct the content
             while (!(line = reader.readLine()).equals("") && !line.startsWith("------WebKitFormBoundary")) {
                 content.append(line + "\n");
                 System.out.println(content);
             }
 
+            // tails of the request
             while (reader.ready()) {
                 line = reader.readLine();
             }
         }
 
-        System.out.println("end" + httpCommanmd + uri);
         return new RequestInfo(httpCommanmd, uri, uriParts, queryParams, content.toString().getBytes("UTF-8"));
     }
 

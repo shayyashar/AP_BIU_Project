@@ -17,8 +17,10 @@ public class HtmlLoader implements Servlet {
 
     @Override
     public void handle(RequestInfo ri, OutputStream toClient) throws IOException {
+
         String filePath = htmlDirectory + "/" + String.join("/", ri.getUriSegments()[ri.getUriSegments().length - 1]);
         if (Files.exists(Paths.get(filePath))) {
+            // read the html and return to the client
             byte[] content = Files.readAllBytes(Paths.get(filePath));
             toClient.write(("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n").getBytes());
             toClient.write(content);

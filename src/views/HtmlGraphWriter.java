@@ -40,6 +40,7 @@ public class HtmlGraphWriter {
                         """
         );
 
+        // from the graph create the vertex and edges
         ArrayList<Map<String, String>> nodes = new ArrayList<>();
         ArrayList<Map<String, String>> edges = new ArrayList<>();
 
@@ -62,12 +63,14 @@ public class HtmlGraphWriter {
             nodes.add(vertex);
         }
 
+        // from dict to html format of d3.js
         html.add("var nodes=" + nodes.toString()
                 .replace("}", "\"}")
                 .replace("=", ":\"")
                 .replace(",", "\",")
                 .replace("}\"", "}") + ";");
 
+        // from dict to html format of d3.js
         html.add("var links=" + edges.toString()
                 .replace("}", "\"}")
                 .replace("=", ":\"")
