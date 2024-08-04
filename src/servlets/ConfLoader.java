@@ -1,34 +1,48 @@
 package servlets;
 
-import test.Graph;
-import test.Servlet;
-import test.RequestParser;
+import configs.GenericConfig;
+import configs.Graph;
+import graph.TopicManagerSingleton;
+import server.RequestParser;
 import views.HtmlGraphWriter;
 import java.io.*;
+import java.util.Map;
 
 public class ConfLoader implements Servlet {
     @Override
     public void handle(RequestParser.RequestInfo ri, OutputStream toClient) throws IOException {
-//        String boundary = "--" + ri.getHeaders().get("Content-Type").split("boundary=")[1];
-//        InputStream input = ri.getContentStream();
 
-        File tempFile = File.createTempFile("upload", ".tmp");
-//        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-//            byte[] buffer = new byte[1024];
-//            int bytesRead;
-//            while ((bytesRead = input.read(buffer)) != -1) {
-//                fos.write(buffer, 0, bytesRead);
-//            }
-//        }
+        Map<String, String> params = ri.getParameters();
 
+        // extract the filename value
+        String filename = "";
+        for(String param: params.keySet()) {
+            if (param.equals("filename")) {
+                filename = params.get("filename").replace("\"", "");
+            }
+        }
+
+        // clear all topics
+        TopicManagerSingleton.TopicManager tm = TopicManagerSingleton.get();
+        tm.clear();
+
+        // create config from file
+        String fullPath = "config_files/" + filename;
+        GenericConfig genConf = new GenericConfig();
+        genConf.setConfFile(fullPath);
+        genConf.create();
+
+        // create graph from the topics
         Graph graph = new Graph();
+        graph.createFromTopics();
+
+        // call to the HtmlGraphWriter to get this in html file
         String htmlGraph = String.valueOf(HtmlGraphWriter.getGraphHTML(graph));
+        // return to client the output
+        PrintWriter writer = new PrintWriter(toClient, true);
+        writer.println(("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"));
+        writer.println(htmlGraph);
 
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
-        out.println(htmlGraph);
-        out.flush();
-
-        tempFile.delete();
     }
 
     @Override

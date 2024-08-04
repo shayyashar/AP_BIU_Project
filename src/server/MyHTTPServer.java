@@ -1,6 +1,6 @@
-package test;
+package server;
 
-import test.RequestParser.RequestInfo;
+import servlets.Servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,14 +9,13 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class MyHTTPServer extends Thread implements HTTPServer{
+public class MyHTTPServer extends Thread implements HTTPServer {
 
     private final int port;
     private final ExecutorService threadPool;
@@ -27,6 +26,7 @@ public class MyHTTPServer extends Thread implements HTTPServer{
     public MyHTTPServer(int port,int nThreads){
         this.port = port;
         this.threadPool = Executors.newFixedThreadPool(nThreads);
+        // creating Hash Map with key for every method
         this.servlets = new ConcurrentHashMap<>();
         servlets.put("GET", new ConcurrentHashMap<>());
         servlets.put("POST", new ConcurrentHashMap<>());
@@ -34,16 +34,19 @@ public class MyHTTPServer extends Thread implements HTTPServer{
     }
 
     public void addServlet(String httpCommand, String uri, Servlet s) {
+        // put in the correct Hash Map method
         this.servlets.get(httpCommand).put(uri, s);
 
     }
 
     public void removeServlet(String httpCommand, String uri) {
+        // remove from the correct Hash Map method
         this.servlets.get(httpCommand).remove(uri);
     }
 
     public void run() {
         try {
+            // run every 1 sec
             serverSocket = new ServerSocket(port);
             running = true;
             while (running) {
@@ -56,17 +59,18 @@ public class MyHTTPServer extends Thread implements HTTPServer{
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
     }
 
     private void handleClient(Socket clientSocket) {
+        // crete in and out from the socket
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              OutputStream out = clientSocket.getOutputStream()) {
 
+            // parse the request
             RequestParser.RequestInfo ri = RequestParser.parseRequest(in);
             if (ri != null) {
+                // find the correct serverlet with 'findServlet' function
                 Servlet servlet = findServlet(ri.getHttpCommand(), ri.getUri());
                 if (servlet != null) {
                     servlet.handle(ri, out);
@@ -76,14 +80,8 @@ public class MyHTTPServer extends Thread implements HTTPServer{
                     out.write(response.getBytes());
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -97,6 +95,8 @@ public class MyHTTPServer extends Thread implements HTTPServer{
         Servlet matchedServlet = null;
         for (Map.Entry<String, Servlet> entry : commandServlets.entrySet()) {
             String registeredUri = entry.getKey();
+            // check if the request starts with the request we get
+            // and check the maximum match
             if (uri.startsWith(registeredUri) && registeredUri.length() > longestMatch.length()) {
                 longestMatch = registeredUri;
                 matchedServlet = entry.getValue();
@@ -107,6 +107,7 @@ public class MyHTTPServer extends Thread implements HTTPServer{
 
 
     public void close() {
+        //  close the socket
         this.running = false;
         this.threadPool.shutdown();
         try {

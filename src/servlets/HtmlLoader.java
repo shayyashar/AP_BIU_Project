@@ -1,37 +1,37 @@
+
 package servlets;
 
-import test.RequestParser;
-import test.Servlet;
-import java.io.*;
+import server.RequestParser.RequestInfo;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class HtmlLoader implements Servlet {
-    private String baseDirectory;
+    private final String htmlDirectory;
 
-    public HtmlLoader(String baseDirectory) {
-        this.baseDirectory = baseDirectory;
+    public HtmlLoader(String htmlDirectory) {
+        this.htmlDirectory = htmlDirectory;
     }
 
     @Override
-    public void handle(RequestParser.RequestInfo ri, OutputStream toClient) throws IOException {
-        String filePath = baseDirectory + "/" + String.join("/", ri.getUriSegments());
-        File file = new File(filePath);
+    public void handle(RequestInfo ri, OutputStream toClient) throws IOException {
 
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
-        if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.println(line);
-                }
-            }
+        String filePath = htmlDirectory + "/" + String.join("/", ri.getUriSegments()[ri.getUriSegments().length - 1]);
+        if (Files.exists(Paths.get(filePath))) {
+            // read the html and return to the client
+            byte[] content = Files.readAllBytes(Paths.get(filePath));
+            toClient.write(("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n").getBytes());
+            toClient.write(content);
         } else {
-            out.println("<html><body><h1>404 Not Found</h1></body></html>");
+            toClient.write("HTTP/1.1 Status Code 404 Not Found\r\n\r\n".getBytes());
         }
-        out.flush();
+        toClient.close();
     }
 
     @Override
     public void close() throws IOException {
-
+        // Close resources if any
     }
 }

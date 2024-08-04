@@ -1,9 +1,12 @@
-package test;
+package configs;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import test.TopicManagerSingleton.TopicManager;
+import graph.Agent;
+import graph.Topic;
+import graph.TopicManagerSingleton;
+import graph.TopicManagerSingleton.TopicManager;
 
 public class Graph extends ArrayList<Node>{
 
@@ -17,12 +20,14 @@ public class Graph extends ArrayList<Node>{
     }
 
     private Node getOrCreateNode (String nodeName, char nodeType) {
-        String vertexName = nodeType + nodeName;
+        // check if the node exists - like singleton
+        String vertexName = nodeType + nodeName; // the new name of vertex
         for (Node vertex : this) {
             if (vertex.getName().equals(vertexName)) {
-                return vertex;
+                return vertex; // exists and return it
             }
         }
+        // not exists and create and return it
         Node vertex = new Node(vertexName);
         this.add(vertex);
         return vertex;
@@ -33,21 +38,23 @@ public class Graph extends ArrayList<Node>{
 
         Collection<Topic> collTopics =  tm.getTopics();
 
+        // for loop on topics
         for (Topic t : collTopics) {
+            // create/get topic
             String topicName = t.name;
             Node topicNode = getOrCreateNode(topicName, 'T');
 
+            // all edges from the topic node to agents
             for (Agent a : t.subs) {
                 Node agentNode = getOrCreateNode(a.getName(), 'A');
                 topicNode.addEdge(agentNode);
             }
 
+            // all edges to the topic node from agents
             for (Agent a: t.pubs) {
                 Node agentNode = getOrCreateNode(a.getName(), 'A');
                 agentNode.addEdge(topicNode);
             }
         }
-    }    
-
-    
+    }
 }

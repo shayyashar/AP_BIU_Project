@@ -1,11 +1,11 @@
-package test;
+package configs;
 
-import test.TopicManagerSingleton.TopicManager;
+import graph.Agent;
+import graph.Message;
+import graph.TopicManagerSingleton;
+import graph.TopicManagerSingleton.TopicManager;
 
-import java.util.List;
-import java.util.Objects;
-
-public class IncAgent  implements Agent{
+public class IncAgent  implements Agent {
 
     public String inputTopicName;
     public String outputTopicName;
@@ -21,7 +21,7 @@ public class IncAgent  implements Agent{
 
     @Override
     public String getName() {
-        return "";
+        return "Inc Agent";
     }
 
     @Override

@@ -1,4 +1,4 @@
-package test;
+package configs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ public class Node {
         this.edges = new ArrayList<Node>();
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    List<Node> getEdges() {
+    public List<Node> getEdges() {
         return this.edges;
     }
 
@@ -34,6 +34,7 @@ public class Node {
     }
 
     private boolean hasCyclesUtils(Node vertex, List<Node> vertexVisited) {
+        // like dfs - check if we come to vertex that we visited before
         vertexVisited.add(vertex);
         for (Node neighbor : vertex.edges) {
             if (vertexVisited.contains(neighbor)) {
@@ -42,11 +43,13 @@ public class Node {
                 return true;
             }
         }
+        // when we check all the vertex neighbors down
         vertexVisited.remove(vertex);
         return false;
     }
 
     boolean hasCycles() {
+        // call to recursive function with array list to indicate if there is cycle
         return hasCyclesUtils(this, new ArrayList<Node>());
     }
 

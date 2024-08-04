@@ -1,10 +1,11 @@
-package test;
+package graph;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ParallelAgent implements Agent {
 
+    // inner class for get object of message and topic together
     public static class MessageAndTopic {
         public Message message;
         public String topic;
@@ -20,7 +21,7 @@ public class ParallelAgent implements Agent {
     protected Thread thread;
     volatile boolean stop;
 
-    public ParallelAgent(Agent agent, int capacity) {
+    public ParallelAgent(Agent agent, int capacity) { // constructor
         this.messagesQueue = new ArrayBlockingQueue<>(capacity);
         this.agent = agent;
         this.thread = new Thread(this::take);
@@ -28,7 +29,7 @@ public class ParallelAgent implements Agent {
     }
 
     public void put(String topic, Message msg) {
-        try {
+        try { // put in the queue the MessageAndTopic
             this.messagesQueue.put(new MessageAndTopic(topic, msg));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -36,10 +37,11 @@ public class ParallelAgent implements Agent {
     }
 
     public void take() {
-        while (!this.stop) {
+        while (!this.stop) { // take from the queue the MessageAndTopic
             MessageAndTopic mt;
             try {
                 mt = this.messagesQueue.take();
+                // splitting the message and topic
                 this.agent.callback(mt.topic, mt.message);
             } catch (InterruptedException e) {
                 if (this.stop) {
@@ -70,7 +72,7 @@ public class ParallelAgent implements Agent {
 
     @Override
     public void close() {
-        this.stop = true;
+        this.stop = true; // to stop the thread
         this.thread.interrupt();
 
     }

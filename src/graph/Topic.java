@@ -1,4 +1,4 @@
-package test;
+package graph;
 
 import java.util.ArrayList;
 
@@ -6,13 +6,12 @@ public class Topic {
     public final String name;
     public ArrayList<Agent> subs;
     public ArrayList<Agent> pubs;
-    public Message last_message;
+    public Message last_message; // for final project
 
     Topic(String name) {
         this.name = name;
         this.subs = new ArrayList<Agent>();
         this.pubs = new ArrayList<Agent>();
-        this.last_message = new Message(0.0);
     }
 
 

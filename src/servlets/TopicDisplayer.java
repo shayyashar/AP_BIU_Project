@@ -1,10 +1,11 @@
 package servlets;
 
-import test.*;
+import graph.Message;
+import graph.Topic;
+import graph.TopicManagerSingleton;
+import server.RequestParser;
 
 import java.io.*;
-import java.util.Map;
-import java.util.HashMap;
 
 public class TopicDisplayer implements Servlet {
     @Override
@@ -15,14 +16,17 @@ public class TopicDisplayer implements Servlet {
         TopicManagerSingleton.TopicManager tm = TopicManagerSingleton.get();
         tm.getTopic(topic).publish(new Message(message));
 
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(toClient));
-        out.println("<html><body><table border='1'>");
-        out.println("<tr><th>Topic</th><th>Value</th></tr>");
+        PrintWriter writer = new PrintWriter(toClient, true);
+        // create a table for html to return to client
+        StringBuilder toWrite = new StringBuilder();
+        writer.println("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n");
+        toWrite.append("<!DOCTYPE html><html lang=\"en\"><body><table border='1' style='margin:auto;margin-top:30%'>");
+        toWrite.append("<tr><th>Topic</th><th>Value</th></tr>");
         for (Topic t : tm.getTopics()) {
-            out.println("<tr><td>" + t.name + "</td><td>" + t.last_message + "</td></tr>");
+            toWrite.append("<tr><td>" + t.name + "</td><td>" + t.last_message.asDouble + "</td></tr>");
         }
-        out.println("</table></body></html>");
-        out.flush();
+        toWrite.append("</table></body></html>");
+        writer.println(toWrite);
     }
 
     @Override

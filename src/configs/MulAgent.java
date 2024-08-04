@@ -1,11 +1,13 @@
-package test;
+package configs;
 
-import test.TopicManagerSingleton.TopicManager;
+import graph.Agent;
+import graph.Message;
+import graph.TopicManagerSingleton;
+import graph.TopicManagerSingleton.TopicManager;
 
-import java.util.List;
 import java.util.Objects;
 
-public class PlusAgent implements Agent{
+public class MulAgent implements Agent {
 
     public String topicName1;
     public double x;
@@ -13,7 +15,7 @@ public class PlusAgent implements Agent{
     public double y;
     public String outputTopicName;
 
-    public PlusAgent(String[] subs, String[] pubs) {
+    public MulAgent(String[] subs, String[] pubs) {
         TopicManagerSingleton.TopicManager tm = TopicManagerSingleton.get();
         this.topicName1 = subs[0];
         tm.getTopic(this.topicName1).subscribe(this);
@@ -29,7 +31,7 @@ public class PlusAgent implements Agent{
 
     @Override
     public String getName() {
-        return "";
+        return "Mul Agent";
     }
 
     @Override
@@ -48,7 +50,7 @@ public class PlusAgent implements Agent{
             else {
                 return;
             }
-            double res = this.x + this.y;
+            double res = this.x * this.y;
             TopicManager tm = TopicManagerSingleton.get();
             tm.getTopic(this.outputTopicName).publish(new Message(res));
         }
