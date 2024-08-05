@@ -66,7 +66,6 @@ public class RequestParser {
             // extarct the content
             while (!(line = reader.readLine()).equals("") && !line.startsWith("------WebKitFormBoundary")) {
                 content.append(line + "\n");
-                System.out.println(content);
             }
 
             // tails of the request
